@@ -23,5 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\classlibrary\ClassLibrary.csproj" />
     <ProjectReference Include="..\datastore\DataStore.csproj" />
+    <ProjectReference Include="..\Logic\Logic.csproj" />
+    <ProjectReference Include="..\Utilities\Utilities.csproj" />
   </ItemGroup>
 </Project>

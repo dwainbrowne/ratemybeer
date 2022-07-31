@@ -4,10 +4,8 @@ namespace ClassLibrary
 {
  
 
-    public class Beer
-    {
-        [JsonProperty("id")]
-        public int Id { get; set; }
+    public class Beer: BaseData
+    {       
 
         [JsonProperty("name")]
         public string Name { get; set; }

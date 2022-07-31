@@ -3,9 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using ClassLibrary;
 using FluentValidation;
 
-namespace ClassLibrary.Validator
+namespace Logic.Validator
 {
     public class RatingsValidator : AbstractValidator<Ratings>
     {
