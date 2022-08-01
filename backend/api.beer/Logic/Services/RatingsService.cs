@@ -18,7 +18,7 @@ namespace Logic
 
         public RatingsService(IQueryCollection query, string body):base(query, body)
         {
-
+            _store = new FileDataStore();
         }
 
 
@@ -43,12 +43,17 @@ namespace Logic
            return true;
         }
 
+        /// <summary>
+        /// Save ratings to local database
+        /// </summary>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public async Task<ApplicationResponse> StoreData()
         {
             try
             {
                 List<Ratings> ratingsdata = new List<Ratings>();
-                _store = new FileDataStore();
+               
 
                 //Validate we have a file we can save to
                 await EnsureFileStoreExist();
@@ -85,7 +90,7 @@ namespace Logic
             return JsonConvert.SerializeObject(ratingsdata); ;
         }
 
-        private async Task EnsureFileStoreExist()
+        public async Task EnsureFileStoreExist()
         {
             //Ensure we have a file on disk
             string? path = Environment.GetEnvironmentVariable("JsonFilePath");
@@ -95,9 +100,35 @@ namespace Logic
                 await _store.Create("[]", DataStoreContainer.ratings);
         }
 
-        public async Task<ApplicationResponse> GetData()
+
+        public async Task<ApplicationResponse> GetData(SearchQuery query)
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<Ratings> ratingsdata = new List<Ratings>();
+                _store = new FileDataStore();
+
+                //Validate we have a file we can save to
+                await EnsureFileStoreExist();
+
+                //Append new data to file
+                string json = await AppendDataToPreviouslySavedRecord(ratingsdata);
+
+
+                //Save data
+                dynamic results = await _store.Create(json, DataStoreContainer.ratings);
+
+                _response.Success = true;
+                _response.Message = "Succesfully saved data to file";
+                _response.Total = ratingsdata?.Count;
+                _response.Data = JsonConvert.DeserializeObject<List<Ratings>>(results);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to save file to disk: {e.Message}", e);
+            }
+
+            return _response;
         }
     }
 }

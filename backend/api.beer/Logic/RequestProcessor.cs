@@ -14,6 +14,13 @@ namespace Logic
     /// </summary>
     public static class RequestProcessor
     {
+        /// <summary>
+        /// Handle all create, update request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static async Task<ApplicationResponse> Process(HttpRequest request, ApplicationResponse response)
         {
             try
@@ -41,6 +48,39 @@ namespace Logic
                 else
                     throw new Exception("Data validation failed");
 
+
+                return response;
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Error while processing application request: {e.Message}");
+            }
+        }
+
+        /// <summary>
+        /// Handles all search query request
+        /// </summary>
+        /// <param name="request"></param>
+        /// <param name="response"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static async Task<ApplicationResponse> ProcessQuery(HttpRequest request, SearchQuery query, ApplicationResponse response)
+        {
+            try
+            {
+                //Evaluate the request and dynamically create service object to handle custom business logic
+                IService? service = await Factory.CreateService(request);
+
+
+                if (service == null)
+                    throw new Exception("Failed to initialize factory service");
+
+
+                //Store aplication request data
+                response = await service.GetData(query);
+
+
+                response.Success = true;      
 
                 return response;
             }

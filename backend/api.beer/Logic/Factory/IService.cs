@@ -36,6 +36,6 @@ namespace Logic
         /// Returns a list of records based on query
         /// </summary>
         /// <returns></returns>
-        Task<ApplicationResponse> GetData(); 
+        Task<ApplicationResponse> GetData(SearchQuery query); 
     }
 }

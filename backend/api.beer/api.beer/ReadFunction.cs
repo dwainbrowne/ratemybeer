@@ -1,6 +1,10 @@
+using System;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
+using ClassLibrary.Application;
+using Logic;
+using Logic.Validation;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Azure.WebJobs;
@@ -25,24 +29,30 @@ namespace Api.Beer
         [FunctionName("read")]
         [OpenApiOperation(operationId: "read", tags: new[] { "read" })]
         [OpenApiSecurity("function_key", SecuritySchemeType.ApiKey, Name = "code", In = OpenApiSecurityLocationType.Query)]
-        [OpenApiParameter(name: "name", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **Name** parameter")]
+        [OpenApiParameter(name: "q", In = ParameterLocation.Query, Required = true, Type = typeof(string), Description = "The **query** parameter")]
         [OpenApiResponseWithBody(statusCode: HttpStatusCode.OK, contentType: "text/plain", bodyType: typeof(string), Description = "The OK response")]
         public async Task<IActionResult> Read(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
         {
-            _logger.LogInformation("C# HTTP trigger function processed a request.");
+            ApplicationResponse response = new ApplicationResponse();
 
-            string name = req.Query["name"];
+            try
+            {
+                //Ensure we have a query keyword to search by
+                SearchQuery query = await DataValidator.IsValidQuery(req);
 
-            string requestBody = await new StreamReader(req.Body).ReadToEndAsync();
-            dynamic data = JsonConvert.DeserializeObject(requestBody);
-            name = name ?? data?.name;
+                //Proceed to process full api request
+                response = await RequestProcessor.ProcessQuery(req, query, response);
 
-            string responseMessage = string.IsNullOrEmpty(name)
-                ? "This HTTP triggered function executed successfully. Pass a name in the query string or in the request body for a personalized response."
-                : $"Hello, {name}. This HTTP triggered function executed successfully.";
+                
 
-            return new OkObjectResult(responseMessage);
+                return new OkObjectResult(response);
+            }
+            catch (Exception e)
+            {
+                response = new ErrorResponse("Failed to process request", e);
+                return new BadRequestObjectResult(response);
+            }
         }
     }
 }

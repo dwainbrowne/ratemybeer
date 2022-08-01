@@ -13,6 +13,12 @@ namespace Logic.Validation
     public static class DataValidator
     {
         
+        /// <summary>
+        /// Evaluate if the requet has a valid id, by calling an external api
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
         public static async Task<bool> IsValidId(HttpRequest req)
         {  
 
@@ -32,6 +38,33 @@ namespace Logic.Validation
             }
 
             return true;
+        }
+
+        /// <summary>
+        /// Evaluate if the requet has a valid id, by calling an external api
+        /// </summary>
+        /// <param name="req"></param>
+        /// <returns></returns>
+        /// <exception cref="Exception"></exception>
+        public static async Task<SearchQuery> IsValidQuery(HttpRequest req)
+        {
+
+            string keyword = req.Query["q"];
+
+            SearchQuery query = new SearchQuery();
+
+            query.Keyword = keyword;
+
+            SearchValidator validator = new SearchValidator();
+
+            ValidationResult result = validator.Validate(query);
+
+            if (!result.IsValid)
+            {
+                throw new Exception(result.ToString());
+            }
+
+            return query;
         }
     }
 }
