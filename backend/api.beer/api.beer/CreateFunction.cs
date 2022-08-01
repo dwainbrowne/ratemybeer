@@ -1,8 +1,10 @@
+using System;
 using System.Dynamic;
 using System.IO;
 using System.Net;
 using System.Threading.Tasks;
 using ClassLibrary;
+using ClassLibrary.Application;
 using FluentValidation.Results;
 using Logic;
 using Logic.Validation;
@@ -37,36 +39,28 @@ namespace api.beer
         public async Task<IActionResult> Create(
             [HttpTrigger(AuthorizationLevel.Function, "get", "post", Route = null)] HttpRequest req)
         {
-            string id = "";
+            ApplicationResponse response = new ApplicationResponse();
 
-            //Ensure we have a valid id
-            (bool isValidId, string message) = await DataValidator.IsValidId(req);
-
-            if (!isValidId)
-                return new BadRequestObjectResult(message);
-           
-
-            //Evaluate Posted Data
-            IServiceEvaluator service = Factory.CreateService(req);
-
-            //Validate data logic
-            if(service.IsValid())
+            try
             {
+                //Ensure the minimum required request data is valid
+                bool isValidRequest = await DataValidator.IsValidId(req);
 
+
+                if (isValidRequest)
+                {
+                    //Main request logic processing
+                    response = await RequestProcessor.Process(req, response);
+
+                }
+              
+                return new OkObjectResult(response);
             }
-
-
-            //Process Data
-            service.StoreData();
-
-
-            dynamic data = await DataExtractor.Extract<Ratings>(req.Body);
-
-            string responseMessage = string.IsNullOrEmpty(id)
-                ? "Please provide a valid id"
-                : $"Hello, {id}. This HTTP triggered function executed successfully.";
-
-            return new OkObjectResult(responseMessage);
+            catch (Exception e)
+            {
+                response = new ErrorResponse("Failed to process request",e);
+                return new BadRequestObjectResult(response);
+            }
         }
 
         

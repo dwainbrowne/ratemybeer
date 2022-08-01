@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
-    public interface IServiceEvaluator
+    public interface IService
     {
         bool IsValid();
 

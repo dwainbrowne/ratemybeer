@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using ClassLibrary.Application;
 using FluentValidation.Results;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -12,21 +13,25 @@ namespace Logic.Validation
     public static class DataValidator
     {
         
-        public static async Task<(bool,string)> IsValidId(HttpRequest req)
-        {
+        public static async Task<bool> IsValidId(HttpRequest req)
+        {  
+
             string id = req.Query["id"];
 
             BaseData baseData = new BaseData();
 
-            baseData.Id = "";//id;
+            baseData.Id = id;
 
             BaseDataValidator validator = new BaseDataValidator();
 
-           ValidationResult result = await validator.ValidateAsync(baseData);
+            ValidationResult result = await validator.ValidateAsync(baseData);
 
+            if(!result.IsValid)             
+            {
+                throw new Exception(result.ToString());
+            }
 
-
-            return (result.IsValid, result.ToString());
+            return true;
         }
     }
 }

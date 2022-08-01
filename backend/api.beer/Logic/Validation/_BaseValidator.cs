@@ -21,10 +21,10 @@ namespace Logic.Validation
             {
                 try { await _client.GetAsync(id); } catch { }
 
-                bool exists = false;
+                bool exists = true;
 
 
-                return !exists;
+                return exists;
 
             }).WithMessage("Sorry this id does not exist");
         }
