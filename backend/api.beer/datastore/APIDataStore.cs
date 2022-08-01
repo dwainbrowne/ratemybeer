@@ -51,7 +51,7 @@ namespace DataStore
 
 
             //GET Method
-            HttpResponseMessage response = await _client.GetAsync("beers?beer_name=" + where);
+            HttpResponseMessage response = await _client.GetAsync(where);
 
             if (response.IsSuccessStatusCode)
             {

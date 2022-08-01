@@ -1,4 +1,5 @@
 ﻿
+using ClassLibrary.Constants;
 using Newtonsoft.Json;
 using System;
 using System.Collections.Generic;
@@ -16,9 +17,9 @@ namespace DataStore
 
         public FileDataStore()
         {
-            _dataLocation = DataStoreLocation.FILE;        
+            _dataLocation = DataStoreLocation.FILE;
 
-            _filePath = Environment.GetEnvironmentVariable("JsonFilePath");
+            _filePath = AppSettings.FILE_PATH;
         }
 
         public async Task<dynamic> Create(dynamic data, DataStoreContainer container)

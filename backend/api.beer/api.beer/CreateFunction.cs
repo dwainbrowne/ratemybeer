@@ -77,7 +77,7 @@ namespace api.beer
 
         public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken)
         {
-            //TODO: Validate uername here...
+         
             return Task.CompletedTask;
         }
     }

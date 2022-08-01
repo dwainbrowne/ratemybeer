@@ -17,5 +17,8 @@ namespace ClassLibrary
 
         [JsonProperty("comments")]
         public string? Comments { get; set; }
+
+        [JsonProperty("parentId")]
+        public string? ParentId { get; set; }
     }
 }
