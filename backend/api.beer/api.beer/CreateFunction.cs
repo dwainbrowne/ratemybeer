@@ -49,7 +49,7 @@ namespace api.beer
 
                 if (isValidRequest)
                 {
-                    //Main request logic processing
+                    //Proceed to process full api request
                     response = await RequestProcessor.Process(req, response);
 
                 }

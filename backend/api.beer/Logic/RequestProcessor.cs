@@ -9,6 +9,9 @@ using System.Threading.Tasks;
 
 namespace Logic
 {
+    /// <summary>
+    /// RequestProcessor is responsible for standardizing the steps involved when processing a request.
+    /// </summary>
     public static class RequestProcessor
     {
         public static async Task<ApplicationResponse> Process(HttpRequest request, ApplicationResponse response)
@@ -23,6 +26,10 @@ namespace Logic
                     throw new Exception("Failed to initialize factory service");
 
 
+                //Extract data for further processing
+                service.SetDataProperties();
+
+
                 //Only proceed to process request if custom business logic is valid
                 if (service.IsValid())
                 {
@@ -33,7 +40,10 @@ namespace Logic
 
                     response.Success = true;
                 }
-                
+                else
+                    throw new Exception("Data validation failed");
+
+
                 return response;
             }
             catch (Exception e)

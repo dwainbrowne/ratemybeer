@@ -9,6 +9,7 @@ namespace Logic.Service
 {
     public abstract class AbstractService
     {
+        //Globaly set the query and body so all methods can have access for further processing
         internal IQueryCollection _query;
         internal string _body;
 
@@ -17,5 +18,7 @@ namespace Logic.Service
             _query = query;
             _body = body;
         }
+
+
     }
 }

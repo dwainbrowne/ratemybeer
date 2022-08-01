@@ -1,5 +1,8 @@
 ﻿using ClassLibrary;
+using FluentValidation.Results;
 using Logic.Service;
+using Logic.Validation;
+using Logic.Validator;
 using Microsoft.AspNetCore.Http;
 using System.Dynamic;
 using Utilities;
@@ -14,23 +17,35 @@ namespace Logic
         {
 
         }
-        
 
-        private async Task<dynamic?> Extractor(HttpRequest req)
+
+        public async void SetDataProperties()
         {
-            dynamic? data = new ExpandoObject();
-
-             data = await DataExtractor.Extract<Ratings>(_body);
-
-            return data;
+            _ratings = DataExtractor.Extract<Ratings>(_body);
         }
 
         public bool IsValid()
         {
-            throw new NotImplementedException();
+            if (_ratings != null)
+            {
+                RatingsValidator validator = new RatingsValidator();
+                ValidationResult result = validator.Validate(_ratings);
+
+                if (!result.IsValid)
+                    throw new Exception(result.ToString());
+            }
+            else
+                throw new Exception("No ratings data");
+
+           return true;
         }
 
         public bool StoreData()
+        {
+            throw new NotImplementedException();
+        }
+
+        public dynamic GetData()
         {
             throw new NotImplementedException();
         }
