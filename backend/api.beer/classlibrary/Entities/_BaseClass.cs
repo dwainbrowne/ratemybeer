@@ -10,7 +10,7 @@ namespace ClassLibrary
     public class BaseData
     {
         [JsonProperty("id")]
-        public string? Id { get; set; }
+        public string? Id { get; set; } = Guid.NewGuid().ToString();
     }
 
 

@@ -29,13 +29,13 @@ namespace Logic
         /// Stores all request data
         /// </summary>
         /// <returns></returns>
-        bool StoreData();
+        Task<ApplicationResponse> StoreData();
 
 
         /// <summary>
         /// Returns a list of records based on query
         /// </summary>
         /// <returns></returns>
-        dynamic GetData(); 
+        Task<ApplicationResponse> GetData(); 
     }
 }

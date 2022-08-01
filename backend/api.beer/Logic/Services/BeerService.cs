@@ -1,4 +1,5 @@
 ﻿using ClassLibrary;
+using ClassLibrary.Application;
 using Logic.Service;
 using Microsoft.AspNetCore.Http;
 using System;
@@ -30,12 +31,12 @@ namespace Logic
             throw new NotImplementedException();
         }
 
-        public bool StoreData()
+        public async Task<ApplicationResponse> StoreData()
         {
             throw new NotImplementedException();
         }
 
-        public dynamic GetData()
+        public async Task<ApplicationResponse> GetData()
         {
             throw new NotImplementedException();
         }

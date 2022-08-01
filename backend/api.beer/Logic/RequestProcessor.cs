@@ -33,10 +33,8 @@ namespace Logic
                 //Only proceed to process request if custom business logic is valid
                 if (service.IsValid())
                 {
-
-
                     //Store aplication request data
-                    service.StoreData();
+                    response = await service.StoreData();
 
                     response.Success = true;
                 }

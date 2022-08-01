@@ -18,9 +18,6 @@
     </None>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Data\" />
-  </ItemGroup>
-  <ItemGroup>
     <ProjectReference Include="..\classlibrary\ClassLibrary.csproj" />
     <ProjectReference Include="..\datastore\DataStore.csproj" />
     <ProjectReference Include="..\Logic\Logic.csproj" />

@@ -7,7 +7,7 @@ using System.Threading.Tasks;
 
 namespace ClassLibrary
 {
-    public class Ratings
+    public class Ratings : BaseData
     {
         [JsonProperty("username")]
         public string? UserName { get; set; }

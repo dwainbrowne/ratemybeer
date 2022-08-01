@@ -6,6 +6,9 @@ using Logic.Validator;
 using Microsoft.AspNetCore.Http;
 using System.Dynamic;
 using Utilities;
+using DataStore;
+using ClassLibrary.Application;
+using Newtonsoft.Json;
 
 namespace Logic
 {
@@ -40,12 +43,59 @@ namespace Logic
            return true;
         }
 
-        public bool StoreData()
+        public async Task<ApplicationResponse> StoreData()
         {
-            throw new NotImplementedException();
+            try
+            {
+                List<Ratings> ratingsdata = new List<Ratings>();
+                _store = new FileDataStore();
+
+                //Validate we have a file we can save to
+                await EnsureFileStoreExist();
+
+                //Append new data to file
+                string json = await AppendDataToPreviouslySavedRecord(ratingsdata);
+
+
+                //Save data
+                dynamic results = await _store.Create(json, DataStoreContainer.ratings);
+
+                _response.Success = true;
+                _response.Message = "Succesfully saved data to file";
+                _response.Total = ratingsdata?.Count;
+                _response.Data = JsonConvert.DeserializeObject<List<Ratings>>(results);
+            }
+            catch (Exception e)
+            {
+                throw new Exception($"Unable to save file to disk: {e.Message}",e);
+            }
+
+            return _response;
         }
 
-        public dynamic GetData()
+        private async Task<string> AppendDataToPreviouslySavedRecord(List<Ratings> ratingsdata)
+        {
+            ratingsdata = await _store.Read<Ratings>(DataStoreContainer.ratings);
+
+
+            if (ratingsdata != null && _ratings != null)
+                ratingsdata.Add(_ratings);
+            
+
+            return JsonConvert.SerializeObject(ratingsdata); ;
+        }
+
+        private async Task EnsureFileStoreExist()
+        {
+            //Ensure we have a file on disk
+            string? path = Environment.GetEnvironmentVariable("JsonFilePath");
+
+            //Create an empty file if not exist
+            if (!File.Exists(path))
+                await _store.Create("[]", DataStoreContainer.ratings);
+        }
+
+        public async Task<ApplicationResponse> GetData()
         {
             throw new NotImplementedException();
         }

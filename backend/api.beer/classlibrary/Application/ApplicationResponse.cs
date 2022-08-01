@@ -12,6 +12,11 @@ namespace ClassLibrary.Application
         [JsonProperty("success")]
         public bool Success { get; set; }
 
+        [JsonProperty("message")]
+        public string? Message { get; set; }
+
+        [JsonProperty("total")]
+        public int? Total { get; set; }
 
         [JsonProperty("data")]
         public dynamic? Data { get; set; }        

@@ -1,10 +1,13 @@
-﻿using DataStore;
-
-namespace datastore
+﻿
+namespace DataStore
 {
     public interface IDataStore
     {
-        Task<bool> Create(dynamic data, DataStoreContainer container);
+        //Determins where the data should be stored, use to enforce implementation
+        public DataStoreLocation _dataLocation { get; set; }
+         
+
+        Task<dynamic> Create(dynamic data, DataStoreContainer container);
 
         Task<T?> Get<T>(string id, DataStoreContainer container);
 

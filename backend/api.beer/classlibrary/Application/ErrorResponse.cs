@@ -9,8 +9,8 @@ namespace ClassLibrary.Application
 {
     public class ErrorResponse : ApplicationResponse
     {
-        [JsonProperty("message")]
-        public string? Message { get; set; }
+        [JsonProperty("correlationId")]
+        public string? CorrelationId { get; set; }
 
         [JsonProperty("details")]
         public string? Details { get; set; }
