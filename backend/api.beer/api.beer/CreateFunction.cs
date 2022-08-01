@@ -2,6 +2,7 @@ using System;
 using System.Dynamic;
 using System.IO;
 using System.Net;
+using System.Threading;
 using System.Threading.Tasks;
 using ClassLibrary;
 using ClassLibrary.Application;
@@ -14,6 +15,7 @@ using Microsoft.Azure.WebJobs;
 using Microsoft.Azure.WebJobs.Extensions.Http;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Attributes;
 using Microsoft.Azure.WebJobs.Extensions.OpenApi.Core.Enums;
+using Microsoft.Azure.WebJobs.Host;
 using Microsoft.Extensions.Logging;
 using Microsoft.OpenApi.Models;
 using Newtonsoft.Json;
@@ -21,7 +23,7 @@ using Utilities;
 
 namespace api.beer
 {
-    public class CreateFunction
+    public class CreateFunction: IFunctionExceptionFilter, IFunctionInvocationFilter
     {
         private readonly ILogger<CreateFunction> _logger;
 
@@ -63,7 +65,21 @@ namespace api.beer
             }
         }
 
-        
+        public Task OnExceptionAsync(FunctionExceptionContext exceptionContext, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task OnExecutedAsync(FunctionExecutedContext executedContext, CancellationToken cancellationToken)
+        {
+            return Task.CompletedTask;
+        }
+
+        public Task OnExecutingAsync(FunctionExecutingContext executingContext, CancellationToken cancellationToken)
+        {
+            //TODO: Validate uername here...
+            return Task.CompletedTask;
+        }
     }
 }
 
