@@ -118,7 +118,7 @@ namespace Logic
 
             _store = new APIDataStore();
 
-            beers = await _store.Read<Beer>(DataStoreContainer.beer, where: "?beers?beer_name=" + query.Keyword);
+            beers = await _store.Read<Beer>(DataStoreContainer.beer, where: "beers?beer_name=" + query.Keyword);
 
 
             return beers;

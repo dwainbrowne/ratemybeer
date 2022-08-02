@@ -19,6 +19,8 @@ namespace Logic.Validator
             RuleFor(r => r.Rating).GreaterThanOrEqualTo(1);
             RuleFor(r => r.Rating).LessThanOrEqualTo(5);
 
+            RuleFor(r => r.UserName).EmailAddress(FluentValidation.Validators.EmailValidationMode.AspNetCoreCompatible);
+
         }
     }
 }
