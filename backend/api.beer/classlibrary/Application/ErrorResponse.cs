@@ -10,7 +10,7 @@ namespace ClassLibrary.Application
     public class ErrorResponse : ApplicationResponse
     {
         [JsonProperty("correlationId")]
-        public string? CorrelationId { get; set; }
+        public string? CorrelationId { get; set; } = Guid.NewGuid().ToString();
 
         [JsonProperty("details")]
         public string? Details { get; set; }

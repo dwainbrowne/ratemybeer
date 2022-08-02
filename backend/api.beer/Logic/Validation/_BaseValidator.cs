@@ -26,7 +26,7 @@ namespace Logic.Validation
                 //Call External API and lookup data
                 try
                 {
-                    List<Beer> beers = await _store.Read<Beer>(DataStoreContainer.beer, where: "?ids=" + id);
+                    List<Beer> beers = await _store.Read<Beer>(DataStoreContainer.beer, where: "beers?ids=" + id);
 
                     if (beers.Any())
                         exists = true;
