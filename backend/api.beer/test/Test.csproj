@@ -16,9 +16,12 @@
 
   <ItemGroup>
     <Folder Include="Data\" />
-    <Folder Include="API\" />
     <Folder Include="Unit\" />
     <Folder Include="Validation\" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <ProjectReference Include="..\datastore\DataStore.csproj" />
   </ItemGroup>
 
 </Project>

@@ -20,15 +20,15 @@ namespace Logic.Validation
 
             RuleFor(r => r.Id).NotEmpty().WithMessage("Please provide a valid id");
 
+
+            //Validate id by calling an external api
             RuleFor(x => x.Id).MustAsync(async (id, cancellation) =>
             {
-
-                //Call External API and lookup data
                 try
                 {
-                    List<Beer> beers = await _store.Read<Beer>(DataStoreContainer.beer, where: "beers?ids=" + id);
+                    Beer? beer = await _store.Get<Beer>(id,DataStoreContainer.beer);
 
-                    if (beers.Any())
+                    if (beer?.Id == id)
                         exists = true;
                 }
                 catch(Exception e) { throw new Exception("Unable to lookup and validate id", e); }

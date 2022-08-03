@@ -30,9 +30,11 @@ namespace DataStore
             throw new NotImplementedException();
         }
 
-        public Task<T?> Get<T>(string id, DataStoreContainer container)
+        public async Task<T?> Get<T>(string id, DataStoreContainer container)
         {
-            throw new NotImplementedException();
+            List<T> results = await Read<T>(DataStoreContainer.beer, where: $"beers?ids={id}");
+
+            return results.FirstOrDefault();
         }
 
         public Task<List<T>> Query<T>(DataStoreContainer container, Dictionary<string, string> where, string select = "*")
@@ -45,6 +47,13 @@ namespace DataStore
             //Convert Json back to list
             List<T> results = new List<T>();
 
+            results = await CallSearchAPI(where, results);
+
+            return results;
+        }
+
+        private async Task<List<T>> CallSearchAPI<T>(string where, List<T> results)
+        {
             _client.BaseAddress = new Uri("https://api.punkapi.com/v2/");
             _client.DefaultRequestHeaders.Accept.Clear();
             _client.DefaultRequestHeaders.Accept.Add(new MediaTypeWithQualityHeaderValue("application/json"));
@@ -59,7 +68,6 @@ namespace DataStore
 
                 results = JsonConvert.DeserializeObject<List<T>>(json);
             }
-
 
             return results;
         }
